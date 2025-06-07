@@ -15,21 +15,22 @@ jobs:
       - name: Descargar tu código (Checkout)
         uses: actions/checkout@v4
 
-      - name: "----------------------------------------------------"
-        run: echo "PASO 1: VERIFICANDO EL ARCHIVO BUILDOZER.SPEC"
+      - name: "--- PASO 1: VERIFICANDO EL ARCHIVO BUILDOZER.SPEC ---"
+        run: echo "Mostrando contenido de buildozer.spec..."
 
       - name: Mostrar contenido de buildozer.spec
-        run: cat buildozer.spec
+        run: cat buildozer.spec || echo "ERROR: No se encontró el archivo buildozer.spec"
 
-      - name: "----------------------------------------------------"
-        run: echo "PASO 2: VERIFICANDO EL ARCHIVO DE WORKFLOW (.YML)"
+      - name: "--- PASO 2: VERIFICANDO EL ARCHIVO DE WORKFLOW (.YML) ---"
+        run: echo "Mostrando contenido del archivo .yml..."
       
       - name: Listar archivos en .github/workflows
         run: ls -l .github/workflows/
 
       - name: Mostrar contenido del archivo YML
-        # IMPORTANTE: Si tu archivo no se llama 'main.yml', cambia el nombre en la línea de abajo
-        run: cat .github/workflows/main.yml
+        # IMPORTANTE: Si tu archivo no se llama 'build.yml', cambia el nombre en la línea de abajo
+        run: cat .github/workflows/build.yml || echo "ERROR: No se encontró el archivo .yml"
 
-      - name: "----------------------------------------------------"
-        run: echo "VERIFICACIÓN COMPLETA. Revisa el contenido de los archivos en el log de esta ejecución."
+      - name: "--- VERIFICACIÓN COMPLETA ---"
+        run: echo "Revisa el contenido de los archivos impresos en el log de esta ejecución."
+
