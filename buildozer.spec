@@ -1,48 +1,43 @@
-# --- ESTE ES EL ARCHIVO buildozer.spec COMPLETO Y CORREGIDO ---
-
+# --- VERSIÓN FINAL Y CORREGIDA ---
 [app]
 
-# (Obligatorio) Título de tu aplicación, el que aparecerá bajo el ícono.
+# Título de la aplicación
 title = Mi Inventario
 
-# (Obligatorio) Nombre del paquete. TODO EN MINÚSCULAS Y SIN ESPACIOS.
+# Nombre del paquete (minúsculas, sin espacios)
 package.name = miinventario
 
-# (Obligatorio) Dominio del paquete. Puedes inventarlo.
+# Dominio del paquete
 package.domain = org.test
 
-# (Obligatorio) Directorio donde está tu código. El punto '.' significa "esta carpeta".
+# Directorio del código fuente
 source.dir = .
 
-# (Obligatorio) Extensiones de archivo que se incluirán.
-# Asegúrate de que estén todas las que usas: py, kv, png, gif, json.
+# Extensiones de archivo a incluir
 source.include_exts = py,png,jpg,jpeg,gif,json,kv
 
-# (Obligatorio) La versión de tu app.
+# Versión de la app
 version = 1.0
 
-# (Obligatorio) Librerías que tu app necesita. Kivy ya está.
+# Librerías necesarias
 requirements = python3,kivy
 
-# Orientación de la pantalla. Tu app parece vertical.
+# Orientación de la pantalla
 orientation = portrait
 
-# (Opcional) El ícono de tu aplicación (un archivo .png de tu proyecto).
-# Asegúrate de que el nombre del archivo exista en tu carpeta.
+# Ícono de la aplicación
 icon.filename = %(source.dir)s/icon.png
 
-# (Opcional) La imagen que aparece mientras carga la app (splash screen).
+# Imagen de carga
 presplash.filename = %(source.dir)s/fondo.png
 
-# (Opcional) Para que no sea a pantalla completa y se vean las barras de Android.
+# Modo de pantalla (no pantalla completa)
 fullscreen = 0
 
-# --- ¡MUY IMPORTANTE! PERMISOS DE ANDROID ---
-# Tu app necesita leer archivos con el FileChooser.
+# Permisos de Android
 android.permissions = READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE
 
-# --- ¡IMPORTANTE! FIJAR VERSIONES DE ANDROID (SOLUCIÓN AL ERROR DE LICENCIA) ---
-# Le decimos a Buildozer qué versiones estables y conocidas usar.
+# --- FIJAR VERSIONES DE ANDROID (SOLUCIÓN AL ERROR DE LICENCIA) ---
 android.sdk = 34
 android.ndk = 25b
 android.build_tools_version = 34.0.0
@@ -50,8 +45,8 @@ android.build_tools_version = 34.0.0
 
 [buildozer]
 
-# Nivel de detalle de los mensajes de error. No es necesario cambiarlo.
+# Nivel de detalle de los mensajes
 log_level = 2
 
-# Permite que Buildozer borre la carpeta de compilación si es necesario.
+# Limpiar instalación previa
 clean_install = True
