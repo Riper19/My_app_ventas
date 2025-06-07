@@ -15,13 +15,15 @@ jobs:
       - name: Descargar tu código (Checkout)
         uses: actions/checkout@v4
 
-      # --- CAMBIO CRÍTICO AQUÍ ---
-      # Añadimos "-v2" a la clave para forzar la creación de un nuevo caché
-      - name: Configurar caché de Buildozer
-        uses: actions/cache@v4
-        with:
-          path: .buildozer
-          key: ${{ runner.os }}-buildozer-${{ hashFiles('buildozer.spec') }}-v2
+      # --------------------------------------------------------------------
+      # PASO 1: Desactivamos temporalmente el caché para forzar una
+      # compilación 100% limpia. Esto es la clave.
+      # --------------------------------------------------------------------
+      # - name: Configurar caché de Buildozer
+      #   uses: actions/cache@v4
+      #   with:
+      #     path: .buildozer
+      #     key: ${{ runner.os }}-buildozer-${{ hashFiles('buildozer.spec') }}-v3
 
       - name: Configurar Java Development Kit (JDK)
         uses: actions/setup-java@v4
@@ -39,6 +41,13 @@ jobs:
           python3 -m pip install --upgrade pip
           python3 -m pip install --upgrade cython buildozer
       
+      # --------------------------------------------------------------------
+      # PASO 2: Verificamos que el archivo buildozer.spec es el correcto
+      # antes de compilar.
+      # --------------------------------------------------------------------
+      - name: Mostrar contenido de buildozer.spec
+        run: cat buildozer.spec
+
       - name: Aceptar licencias del SDK de Android
         run: yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses
 
@@ -50,3 +59,4 @@ jobs:
         with:
           name: Android-APK
           path: bin/*.apk
+          
