@@ -1,0 +1,69 @@
+# Nombre del workflow que verás en la pestaña "Actions" de GitHub
+name: Construir APK para Android
+
+# Disparadores: Esto le dice a GitHub CUÁNDO debe ejecutar las instrucciones
+on:
+  # 1. Se ejecutará cada vez que subas cambios (push) a tu repositorio
+  push:
+    branches:
+      - main
+      - master  # Se incluyen ambas por si tu rama principal tiene uno de estos nombres
+
+  # 2. ¡MUY ÚTIL! Permite ejecutar el workflow manualmente cuando quieras
+  #    Aparecerá un botón "Run workflow" en la pestaña Actions.
+  workflow_dispatch:
+
+# Trabajos (Jobs): Las tareas que se van a realizar
+jobs:
+  # Nombre del trabajo. Puedes ponerle lo que quieras.
+  build-android:
+
+    # El tipo de servidor que usará GitHub para compilar (Ubuntu Linux es el ideal)
+    runs-on: ubuntu-latest
+
+    # Pasos (Steps): La secuencia de comandos que ejecutará el servidor
+    steps:
+      # Paso 1: Descarga tu código del repositorio al servidor temporal
+      - name: Descargar tu código (Checkout)
+        uses: actions/checkout@v4
+
+      # Paso 2: Guarda en caché los archivos de Buildozer para que las futuras
+      # compilaciones sean mucho más rápidas (de 20 min a solo 5-7 min)
+      - name: Configurar caché de Buildozer
+        uses: actions/cache@v4
+        with:
+          path: .buildozer
+          key: ${{ runner.os }}-buildozer-${{ hashFiles('buildozer.spec') }}
+
+      # Paso 3: Configura el entorno de Java (JDK), que es obligatorio para Android
+      - name: Configurar Java Development Kit (JDK)
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      # Paso 4: Instala todas las librerías y dependencias de sistema que Buildozer necesita
+      - name: Instalar dependencias de sistema (Linux)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y git zip unzip openjdk-17-jdk python3-dev autoconf automake libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev
+
+      # Paso 5: Instala las herramientas de Python (Cython y el propio Buildozer)
+      - name: Instalar dependencias de Python
+        run: |
+          python3 -m pip install --upgrade pip
+          python3 -m pip install --upgrade cython buildozer
+
+      # Paso 6: ¡El gran momento! Ejecuta Buildozer para compilar el APK
+      - name: Compilar APK con Buildozer
+        run: buildozer -v android debug
+
+      # Paso 7: Sube el APK resultante como un "artefacto" para que puedas descargarlo
+      - name: Subir el archivo APK
+        uses: actions/upload-artifact@v4
+        with:
+          # Nombre del archivo que descargarás (será un .zip)
+          name: Android-APK
+          # Ruta donde Buildozer deja el archivo .apk compilado
+          path: bin/*.apk
+          
