@@ -1,36 +1,18 @@
-name: VERIFICAR ARCHIVOS DE CONFIGURACIÓN
-
+name: VERIFICAR ARCHIVOS
 on:
   push:
-    branches:
-      - main
-      - master
+    branches: [main, master]
   workflow_dispatch:
 
 jobs:
-  verify-files:
+  verificar:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Descargar tu código (Checkout)
+      - name: Descargar codigo
         uses: actions/checkout@v4
 
-      - name: "--- PASO 1: VERIFICANDO EL ARCHIVO BUILDOZER.SPEC ---"
-        run: echo "Mostrando contenido de buildozer.spec..."
+      - name: Mostrar buildozer.spec
+        run: cat buildozer.spec
 
-      - name: Mostrar contenido de buildozer.spec
-        run: cat buildozer.spec || echo "ERROR: No se encontró el archivo buildozer.spec"
-
-      - name: "--- PASO 2: VERIFICANDO EL ARCHIVO DE WORKFLOW (.YML) ---"
-        run: echo "Mostrando contenido del archivo .yml..."
-      
-      - name: Listar archivos en .github/workflows
-        run: ls -l .github/workflows/
-
-      - name: Mostrar contenido del archivo YML
-        # IMPORTANTE: Si tu archivo no se llama 'build.yml', cambia el nombre en la línea de abajo
-        run: cat .github/workflows/build.yml || echo "ERROR: No se encontró el archivo .yml"
-
-      - name: "--- VERIFICACIÓN COMPLETA ---"
-        run: echo "Revisa el contenido de los archivos impresos en el log de esta ejecución."
-
+      - name: Mostrar archivo yml
+        run: cat .github/workflows/build.yml
