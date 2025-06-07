@@ -15,10 +15,7 @@ jobs:
       - name: Descargar tu código (Checkout)
         uses: actions/checkout@v4
 
-      # --------------------------------------------------------------------
-      # PASO 1: Desactivamos temporalmente el caché para forzar una
-      # compilación 100% limpia. Esto es la clave.
-      # --------------------------------------------------------------------
+      # Mantenemos el caché desactivado para asegurar una instalación limpia
       # - name: Configurar caché de Buildozer
       #   uses: actions/cache@v4
       #   with:
@@ -36,17 +33,17 @@ jobs:
           sudo apt-get update -y
           sudo apt-get install -y git zip unzip build-essential autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libffi-dev libssl-dev python3-dev libjpeg-dev libpng-dev cmake
 
-      - name: Instalar dependencias de Python
+      # --- CAMBIO CRUCIAL AQUÍ ---
+      # Forzamos la instalación de Buildozer a la versión estable 1.5.0
+      - name: Instalar dependencias de Python (con versión fija de Buildozer)
         run: |
           python3 -m pip install --upgrade pip
-          python3 -m pip install --upgrade cython buildozer
+          python3 -m pip install --upgrade cython 'buildozer==1.5.0'
       
-      # --------------------------------------------------------------------
-      # PASO 2: Verificamos que el archivo buildozer.spec es el correcto
-      # antes de compilar.
-      # --------------------------------------------------------------------
-      - name: Mostrar contenido de buildozer.spec
-        run: cat buildozer.spec
+      - name: Mostrar versiones de herramientas
+        run: |
+          python3 -m buildozer --version
+          cat buildozer.spec
 
       - name: Aceptar licencias del SDK de Android
         run: yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses
