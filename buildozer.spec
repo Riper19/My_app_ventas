@@ -1,4 +1,4 @@
-# --- COPIA Y PEGA TODO ESTE CONTENIDO EN TU ARCHIVO buildozer.spec ---
+# --- ESTE ES EL ARCHIVO buildozer.spec COMPLETO Y CORREGIDO ---
 
 [app]
 
@@ -29,13 +29,24 @@ orientation = portrait
 
 # (Opcional) El ícono de tu aplicación (un archivo .png de tu proyecto).
 # Asegúrate de que el nombre del archivo exista en tu carpeta.
-icon.filename = %(source.dir)s/boton_configuracion.png
+icon.filename = %(source.dir)s/icon.png
 
 # (Opcional) La imagen que aparece mientras carga la app (splash screen).
 presplash.filename = %(source.dir)s/fondo.png
 
 # (Opcional) Para que no sea a pantalla completa y se vean las barras de Android.
 fullscreen = 0
+
+# --- ¡MUY IMPORTANTE! PERMISOS DE ANDROID ---
+# Tu app necesita leer archivos con el FileChooser.
+android.permissions = READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE
+
+# --- ¡IMPORTANTE! FIJAR VERSIONES DE ANDROID (SOLUCIÓN AL ERROR DE LICENCIA) ---
+# Le decimos a Buildozer qué versiones estables y conocidas usar.
+android.sdk = 34
+android.ndk = 25b
+android.build_tools_version = 34.0.0
+
 
 [buildozer]
 
@@ -44,7 +55,3 @@ log_level = 2
 
 # Permite que Buildozer borre la carpeta de compilación si es necesario.
 clean_install = True
-
-# --- ¡MUY IMPORTANTE! PERMISOS DE ANDROID ---
-# Tu app necesita leer archivos con el FileChooser, por lo tanto necesita estos permisos.
-android.permissions = READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE
