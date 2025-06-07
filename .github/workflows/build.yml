@@ -1,18 +1,26 @@
-name: VERIFICAR ARCHIVOS
+name: Construir APK con Docker
+
 on:
   push:
     branches: [main, master]
   workflow_dispatch:
 
 jobs:
-  verificar:
+  build-android:
     runs-on: ubuntu-latest
+
     steps:
       - name: Descargar codigo
         uses: actions/checkout@v4
 
-      - name: Mostrar buildozer.spec
-        run: cat buildozer.spec
+      - name: Compilar APK con la imagen Docker de Buildozer
+        run: |
+          docker run --rm -v "$(pwd)":/home/kivy/project kivy/buildozer android debug
+      
+      - name: Subir el APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: Android-APK
+          # La ruta del APK generado por el contenedor
+          path: bin/*.apk
 
-      - name: Mostrar archivo yml
-        run: cat .github/workflows/build.yml
