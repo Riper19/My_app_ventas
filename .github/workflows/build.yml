@@ -10,6 +10,7 @@ on:
 jobs:
   build-android:
     runs-on: ubuntu-latest
+
     steps:
       - name: Descargar tu código (Checkout)
         uses: actions/checkout@v4
@@ -31,14 +32,16 @@ jobs:
           sudo apt-get update -y
           sudo apt-get install -y git zip unzip build-essential autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libffi-dev libssl-dev python3-dev libjpeg-dev libpng-dev cmake
 
-      # --- PASO NUEVO Y CRUCIAL ---
-      - name: Accept Android SDK licenses
-        run: yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses
-
       - name: Instalar dependencias de Python
         run: |
           python3 -m pip install --upgrade pip
           python3 -m pip install --upgrade cython buildozer
+      
+      # --- PASO CRUCIAL AÑADIDO ---
+      # Acepta las licencias del SDK de Android que vienen pre-instaladas en el servidor de GitHub.
+      # Esto evita que el proceso de Buildozer se detenga esperando una confirmación manual.
+      - name: Aceptar licencias del SDK de Android
+        run: yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses
 
       - name: Compilar APK con Buildozer
         run: buildozer -v android debug
